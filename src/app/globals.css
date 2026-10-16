@@ -1,0 +1,250 @@
+@import 'tailwindcss';
+
+/*
+ * Gatehouse design tokens.
+ *
+ * Visual direction: galvanised steel and site signage. The palette is drawn from
+ * the materials of the subject — bare metal, hazard amber, industrial red — not
+ * from a generic dark-mode dashboard. Light-first on purpose: these screens are
+ * read outdoors, in daylight, one-handed, often in the rain.
+ *
+ * One accent only. `--color-hivis` carries primary actions, the amber risk band
+ * and the number plate chip. Nothing else introduces a new colour.
+ */
+
+@theme {
+  /* Surfaces — cool galvanised neutrals, never pure white */
+  --color-paper: #e9ecef;
+  --color-card: #f7f9fa;
+  --color-card-sunk: #dfe4e8;
+  --color-line: #c7d0d8;
+  --color-line-strong: #9dabb8;
+
+  /* Ink — a cool blue-black, deliberately not a neutral #0b0b0b */
+  --color-ink: #0c1219;
+  --color-ink-soft: #33414f;
+  --color-ink-muted: #5d6e7e;
+  --color-ink-faint: #8b9aa8;
+
+  /* The single accent: hi-vis amber, the colour of the equipment on site */
+  --color-hivis: #f2b705;
+  --color-hivis-deep: #b8860b;
+  --color-hivis-wash: #fdf3d6;
+
+  /* Semantic bands */
+  --color-clear: #1f7a4d;
+  --color-clear-wash: #e2f2ea;
+  --color-caution: #b8860b;
+  --color-caution-wash: #fdf3d6;
+  --color-stop: #c7362f;
+  --color-stop-wash: #fbe9e7;
+
+  /* Type */
+  --font-display: var(--font-archivo), 'Archivo', system-ui, sans-serif;
+  --font-sans: var(--font-plex-sans), 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), 'IBM Plex Mono', ui-monospace, monospace;
+
+  /* Two-part shadow law: a tight contact shadow plus a soft ambient one.
+     A single blurred rgba(0,0,0,.1) under every card is the tell we avoid. */
+  --shadow-contact: 0 1px 1px rgb(12 18 25 / 0.06), 0 1px 3px rgb(12 18 25 / 0.05);
+  --shadow-lift: 0 2px 3px rgb(12 18 25 / 0.07), 0 8px 20px -6px rgb(12 18 25 / 0.13);
+  --shadow-press: inset 0 2px 4px rgb(12 18 25 / 0.14);
+
+  --radius-tile: 10px;
+  --radius-card: 14px;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Visible, high-contrast focus. Amber on a dark ring reads at any size. */
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: var(--color-hivis);
+    color: var(--color-ink);
+  }
+
+  /* Touch targets: nothing interactive below 44px, no matter what the layout wants. */
+  button,
+  a[role='button'],
+  [role='tab'] {
+    min-height: 44px;
+  }
+
+  input,
+  select,
+  textarea {
+    font: inherit;
+    color: inherit;
+  }
+}
+
+@layer components {
+  /*
+   * The one memorable element: a UK number plate.
+   *
+   * Registrations are the highest-frequency token in this whole product — a
+   * transport manager scans a column of them a hundred times a day. Rendering
+   * them as actual plates makes them scannable at a glance and grounds the
+   * interface in the subject. Yellow rear plate, black banner, mono type.
+   */
+  .plate {
+    display: inline-flex;
+    align-items: stretch;
+    background: var(--color-hivis);
+    border: 1.5px solid var(--color-ink);
+    border-radius: 4px;
+    overflow: hidden;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    color: var(--color-ink);
+    white-space: nowrap;
+  }
+
+  .plate > .plate-band {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-ink);
+    color: var(--color-card);
+    font-size: 0.6em;
+    padding: 0 0.35em;
+    letter-spacing: 0.08em;
+  }
+
+  .plate > .plate-text {
+    padding: 0.32em 0.5em;
+  }
+
+  /* Size modifiers keep the plate proportionate rather than scaling type blindly. */
+  .plate-sm {
+    font-size: 0.75rem;
+  }
+  .plate-md {
+    font-size: 0.95rem;
+  }
+  .plate-lg {
+    font-size: 1.35rem;
+  }
+
+  /* A hairline rule that reads as a printed form line, not a SaaS divider. */
+  .rule {
+    border-top: 1px solid var(--color-line);
+  }
+
+  /* Form field that looks like something you could write on. */
+  .field {
+    width: 100%;
+    background: var(--color-card);
+    border: 1.5px solid var(--color-line-strong);
+    border-radius: var(--radius-tile);
+    padding: 0.7rem 0.85rem;
+    transition: border-color 140ms ease, box-shadow 140ms ease;
+  }
+
+  .field:hover {
+    border-color: var(--color-ink-muted);
+  }
+
+  .field:focus {
+    outline: none;
+    border-color: var(--color-ink);
+    box-shadow: 0 0 0 3px var(--color-hivis-wash);
+  }
+
+  .field[aria-invalid='true'] {
+    border-color: var(--color-stop);
+    box-shadow: 0 0 0 3px var(--color-stop-wash);
+  }
+
+  /* Scroll strip used by the admin filter chips and the emergency numbers. */
+  .strip {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    padding-bottom: 2px;
+  }
+
+  .strip::-webkit-scrollbar {
+    height: 6px;
+  }
+  .strip::-webkit-scrollbar-thumb {
+    background: var(--color-line-strong);
+    border-radius: 99px;
+  }
+}
+
+@layer utilities {
+  /*
+   * Hazard stripe. Used exactly once, on the landing page, to mark the threshold
+   * into site. It is the one purely graphic element in the product — it earns its
+   * place because "crossing a threshold" is literally what the landing page is.
+   */
+  .hazard {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      var(--color-ink) 0 10px,
+      var(--color-hivis) 10px 20px
+    );
+    height: 7px;
+  }
+
+  /* Screen-reader only, for the labels that keep icon-only controls accessible. */
+  .sr-only-focusable:not(:focus):not(:focus-within) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Motion is a preference, not a decoration. Everything degrades to a plain swap. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Print: a completed record must be legible on paper for the audit file. */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: white;
+    color: black;
+  }
+}

@@ -1,8 +1,19 @@
 node_modules/
+.next/
+out/
 build/
 dist/
-coverage/
+
+# Local workbook data. Never commit records that may contain real people or vehicles.
+data/*.xlsx
+data/*.xls
+data/.tmp/
+!data/.gitkeep
+
+.env
+.env.local
+.env*.local
+
+*.tsbuildinfo
+next-env.d.ts
 .DS_Store
-*.log
-.env*
-!.env.example

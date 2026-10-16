@@ -1,0 +1,5 @@
+# The workbook lives here at runtime and is never committed.
+#
+# This directory is deliberately empty in the repository. The store creates it on
+# the first write, so a fresh clone has nothing to clean up and no chance of a
+# stale records file being mistaken for real data.

@@ -1,6 +1,0 @@
-{
-  "name": "DHL Driver Portal",
-  "description": "A workflow portal for DHL drivers to manage shifts, load GoHighLevel driver run sheets, and access dynamic checklists and forms.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
